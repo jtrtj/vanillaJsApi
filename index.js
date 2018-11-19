@@ -18,11 +18,15 @@ var server = http.createServer(function(req, res) {
   // pathname is the untrimmed path
   var path = parsedUrl.pathname;
   var trimmedPath = path.replace(/^\/+|\/+$/g, "");
+  // get the http method
+  var method = req.method.toLowerCase();
   // send the response
   res.end("hello world\n");
 
   // log the request path
-  console.log('Request received on path: ' +trimmedPath)
+  console.log(
+    "Request received on path: " + trimmedPath + " with method: " + method
+  );
 });
 
 // start the server and hati listen on port 3000

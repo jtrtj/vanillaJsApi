@@ -23,6 +23,8 @@ var server = http.createServer(function(req, res) {
   var queryStringObject = parsedUrl.query;
   // get the http method
   var method = req.method.toLowerCase();
+  // get the headers as an object
+  var headers = req.headers;
   // send the response
   res.end("hello world\n");
 
@@ -33,7 +35,8 @@ var server = http.createServer(function(req, res) {
       " with method: " +
       method +
       " and with these query string parameters: ",
-      queryStringObject
+    queryStringObject, "Request reveived with these headers: ",
+    headers
   );
 });
 

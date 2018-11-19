@@ -1,47 +1,49 @@
 /*
- * primary file for the api
+ * Primary file for API
  *
  */
 
-// dependencies
-
+// Dependencies
 var http = require("http");
 var url = require("url");
+var StringDecoder = require("string_decoder").StringDecoder;
 
-// the server should respond to all request with a string
+// Configure the server to respond to all requests with a string
 var server = http.createServer(function(req, res) {
-  // get the URL and parse it
-  // pass true to tell node to use its query string library
+  // Parse the url
   var parsedUrl = url.parse(req.url, true);
 
-  // get the path
-  // pathname is the untrimmed path
+  // Get the path
   var path = parsedUrl.pathname;
   var trimmedPath = path.replace(/^\/+|\/+$/g, "");
 
-  // get the query string as an object
+  // Get the query string as an object
   var queryStringObject = parsedUrl.query;
-  // get the http method
-  var method = req.method.toLowerCase();
-  // get the headers as an object
-  var headers = req.headers;
-  // send the response
-  res.end("hello world\n");
 
-  // log the request path
-  console.log(
-    "Request received on path: " +
-      trimmedPath +
-      " with method: " +
-      method +
-      " and with these query string parameters: ",
-    queryStringObject, "Request reveived with these headers: ",
-    headers
-  );
+  // Get the HTTP method
+  var method = req.method.toLowerCase();
+
+  //Get the headers as an object
+  var headers = req.headers;
+
+  // Get the payload,if any
+  var decoder = new StringDecoder("utf-8");
+  var buffer = "";
+  req.on("data", function(data) {
+    buffer += decoder.write(data);
+  });
+  req.on("end", function() {
+    buffer += decoder.end();
+
+    // Send the response
+    res.end("Hello World!\n");
+
+    // Log the request/response
+    console.log("Request received with this payload: ", buffer);
+  });
 });
 
-// start the server and hati listen on port 3000
-// listen keeps the node app running
+// Start the server
 server.listen(3000, function() {
-  console.log("the server is listening on port 3000 now.");
+  console.log("The server is up and running now");
 });

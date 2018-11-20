@@ -9,8 +9,23 @@ var url = require("url");
 var StringDecoder = require("string_decoder").StringDecoder;
 var config = require("./config");
 
-// Configure the server to respond to all requests with a string
+// Instatiate the http server
 var server = http.createServer(function(req, res) {
+  unifiedServer(req, res);
+});
+
+// Start the server
+server.listen(config.httpPort, function() {
+  console.log(
+    "The server is listening on " +
+      config.httpPort +
+      " in " +
+      config.envName +
+      " mode."
+  );
+});
+// All the server logic for foth the http and https server
+var unifiedServer = function(req, res) {
   // Parse the url
   var parsedUrl = url.parse(req.url, true);
 
@@ -64,19 +79,7 @@ var server = http.createServer(function(req, res) {
       console.log("Returning this response: ", statusCode, payloadString);
     });
   });
-});
-
-// Start the server
-server.listen(config.port, function() {
-  console.log(
-    "The server is listening on " +
-      config.port +
-      " in " +
-      config.envName +
-      " mode."
-  );
-});
-
+};
 // Define handlers
 var handlers = {};
 // Sample handler
